@@ -55,6 +55,21 @@ mvn test
 
 The API starts at `http://localhost:8080`. The Swagger UI is available at `http://localhost:8080/swagger-ui/index.html` when the application is running.
 
+## API Documentation
+
+The project includes interactive API documentation using Springdoc OpenAPI. After starting the application, open Swagger UI at:
+
+`http://localhost:8080/swagger-ui/index.html`
+
+![Swagger UI](docs/swagger-ui.png)
+
+Swagger UI allows users to:
+
+- Explore all available endpoints.
+- Execute API requests directly from the browser.
+- View request and response models.
+- Test the API without Postman.
+
 ## API Endpoints
 
 | Method | Endpoint | Description |
