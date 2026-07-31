@@ -1,13 +1,14 @@
 package com.expensetracker.repository;
 
+import com.expensetracker.exception.StorageException;
 import com.expensetracker.model.Expense;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -24,7 +25,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 @Repository
 public class JsonExpenseRepository implements ExpenseRepository {
-    private static final String STORAGE_FILE_NAME = "expenses.json";
     private static final TypeReference<List<Expense>> EXPENSE_LIST_TYPE = new TypeReference<>() {
     };
 
@@ -33,9 +33,10 @@ public class JsonExpenseRepository implements ExpenseRepository {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
     private List<Expense> expenses = new ArrayList<>();
 
-    public JsonExpenseRepository(ObjectMapper objectMapper) {
+    public JsonExpenseRepository(ObjectMapper objectMapper,
+                                 @Value("${expense.storage.file:expenses.json}") String storageFile) {
         this.objectMapper = objectMapper;
-        this.storagePath = Path.of(STORAGE_FILE_NAME).toAbsolutePath();
+        this.storagePath = Path.of(storageFile).toAbsolutePath();
     }
 
     @PostConstruct
@@ -137,7 +138,7 @@ public class JsonExpenseRepository implements ExpenseRepository {
                 }
             }
         } catch (IOException exception) {
-            throw new UncheckedIOException("Unable to initialize expense storage", exception);
+            throw new StorageException("Unable to initialize expense storage", exception);
         }
     }
 
@@ -146,7 +147,7 @@ public class JsonExpenseRepository implements ExpenseRepository {
             List<Expense> loadedExpenses = objectMapper.readValue(storagePath.toFile(), EXPENSE_LIST_TYPE);
             return new ArrayList<>(loadedExpenses == null ? List.of() : loadedExpenses);
         } catch (IOException exception) {
-            throw new UncheckedIOException("Unable to read expense storage", exception);
+            throw new StorageException("Unable to read expense storage", exception);
         }
     }
 
@@ -157,7 +158,7 @@ public class JsonExpenseRepository implements ExpenseRepository {
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(temporaryFile.toFile(), updatedExpenses);
             replaceStorageFile(temporaryFile);
         } catch (IOException exception) {
-            throw new UncheckedIOException("Unable to persist expense storage", exception);
+            throw new StorageException("Unable to persist expense storage", exception);
         } finally {
             deleteTemporaryFile(temporaryFile);
         }

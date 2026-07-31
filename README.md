@@ -15,7 +15,7 @@ The application uses a layered Spring Boot design. Expenses are stored in a loca
 - JSON file persistence
 - Input validation
 - Global exception handling
-- JUnit 5 test support
+- JUnit 5 unit and integration tests
 - Swagger/OpenAPI UI through Springdoc
 
 ## Tech Stack

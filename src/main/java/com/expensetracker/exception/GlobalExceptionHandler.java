@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-import java.io.UncheckedIOException;
 import java.time.Instant;
 import java.util.stream.Collectors;
 
@@ -39,7 +38,7 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.BAD_REQUEST, "Malformed request or invalid field format", request);
     }
 
-    @ExceptionHandler({StorageException.class, UncheckedIOException.class})
+    @ExceptionHandler(StorageException.class)
     public ResponseEntity<ApiError> handleStorageFailure(Exception exception, HttpServletRequest request) {
         return buildError(HttpStatus.INTERNAL_SERVER_ERROR, "Expense storage is unavailable", request);
     }

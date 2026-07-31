@@ -21,13 +21,13 @@ The generated output was treated as a starting point, not as final code. Each pa
 
 The implementation was reviewed and adjusted during development. This included checking the API design, refining validation messages, reviewing repository behavior, and improving naming and layer boundaries. A compile issue in the JSON repository—an extra closing brace and duplicated import—was identified and corrected.
 
-The project was built, packaged, and started locally. A read-only request to `GET /expenses` was made successfully and returned `200 OK` with an empty JSON array. The JSON persistence approach, endpoint contracts, and HTTP status-code handling were also reviewed from the implemented code.
+The project was built, packaged, and started locally. A read-only request to `GET /expenses` was made successfully and returned `200 OK`. The JSON persistence approach, endpoint contracts, and HTTP status-code handling were also reviewed from the implemented code.
 
 ## Validation and Testing
 
-The Maven `clean test` lifecycle completed successfully, and the application was packaged and launched successfully on port 8080. The currently committed `tests` directory is configured for JUnit 5 but does not yet contain test classes, so the successful test lifecycle does not represent functional unit-test coverage.
+The Maven `clean test` lifecycle completed successfully. The test suite includes focused service tests, JSON repository persistence/reload tests, and a Spring MVC integration test that covers create, list, category filtering, overall and category totals, deletion, missing-resource handling, and validation.
 
-Manual runtime verification in this session confirmed application startup and the `GET /expenses` response. The remaining endpoints should be exercised with Postman or automated JUnit tests before treating the API as fully regression-tested. JSON persistence and expected HTTP status codes were reviewed from the implementation; full end-to-end persistence coverage was not recorded in this session.
+Manual runtime verification in this session confirmed application startup and the `GET /expenses` response. Automated tests verify the remaining API behavior and temporary JSON-file persistence. Further manual exploratory testing with Postman remains useful before future changes are released.
 
 ## AI Suggestions Not Used
 
