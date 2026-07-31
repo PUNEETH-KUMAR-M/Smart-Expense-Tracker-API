@@ -1,4 +1,9 @@
 package com.expensetracker.dto;
 
-public class ApiError {
+import java.time.Instant;
+
+/**
+ * Standard immutable structure for API error responses.
+ */
+public record ApiError(Instant timestamp, int status, String error, String message, String path) {
 }
